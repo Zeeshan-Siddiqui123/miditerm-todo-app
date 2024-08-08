@@ -1,0 +1,90 @@
+.container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-family: sans-serif;
+    gap: 1rem;
+}
+.input{
+    border: 1px solid rgb(179, 175, 175);
+    width: 600px;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 0.5rem;
+    border-radius: 5px;
+}
+.input input{
+    width: 550px;
+    padding: 5px;
+}
+.input button{
+    width: 560px;
+    background-color: rgb(86, 146, 180);
+    border: 1px solid rgb(86, 146, 180);
+    color: white;
+    padding: 5px;
+}
+.buttons{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.buttons button{
+    background-color: rgb(86, 146, 180);
+    border: 1px solid rgb(86, 146, 180);
+    color: white;
+    width: 190px;
+    border-radius: 5px;
+    padding: 4px;
+}
+.todo-label{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid gray;
+    padding: 0.2rem;
+    width: 580px;
+}
+.todo-label div input{
+    width: 20px;
+    height: 20px;
+    accent-color: green;
+}
+.delete-btn{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.delete-btn button{
+    background-color: red;
+    color: white;
+    border: 1px solid red;
+    border-radius: 5px;
+    padding: 4px;
+    width: 295px;
+}
+@media  screen and (max-width: 425px) {
+    .input{
+        width: 310px;
+    }
+    .input input{
+        width: 290px;
+    }
+    .input button{
+        width: 300px;
+    }
+    .buttons{
+        display: flex;
+        flex-direction: column;
+    }
+    .todo-label{
+        width: 300px;
+    }
+    .delete-btn{
+        display: flex;
+        flex-direction: column;
+    }
+}
