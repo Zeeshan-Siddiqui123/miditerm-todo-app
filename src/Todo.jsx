@@ -1,5 +1,5 @@
 import React, { useReducer, useState, useRef } from 'react';
-import './Todo.';
+import './Todo.css';
 import { FaTrash } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
 
