@@ -3,7 +3,7 @@ import './Todo.css';
 import { FaTrash } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
 
-const ADD = "ADD";
+const AD = "ADD";
 const DELETE = "DELETE";
 const COMPLETE = "COMPLETE";
 const EDIT = "EDIT";
