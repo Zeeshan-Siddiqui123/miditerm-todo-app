@@ -1,175 +1,86 @@
-import React, { useReducer, useState, useRef } from 'react';
-import './Todo.css';
-import { FaTrash } from "react-icons/fa";
-import { MdModeEdit } from "react-icons/md";
+import React, { useState } from 'react';
 
-const AD = "ADD";
-const DELETE = "DELETE";
-const COMPLETE = "COMPLETE";
-const EDIT = "EDIT";
-const DELETE_ALL = "DELETE_ALL";
-const DELETE_DONE = "DELETE_DONE";
-const FILTER = "FILTER";
+const Input = () => {
+    const [name, setName] = useState("");
+    const [inputs, setInputs] = useState([]);
+    const [editIndex, setEditIndex] = useState(null);
 
-const initialTodos = [];
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case COMPLETE:
-      return state.map((todo) =>
-        todo.id === action.id ? { ...todo, complete: !todo.complete } : todo
-      );
-    case ADD:
-      return [action.todo, ...state];
-    case EDIT:
-      return state.map((todo) =>
-        todo.id === action.todo.id ? { ...todo, title: action.todo.title } : todo
-      );
-    case DELETE:
-      return state.filter((todo) => todo.id !== action.id);
-    case DELETE_ALL:
-      return [];
-    case DELETE_DONE:
-      return state.filter((todo) => !todo.complete);
-    case FILTER:
-      if (action.filter === "ALL") {
-        return state;
-      } else if (action.filter === "DONE") {
-        return state.filter((todo) => todo.complete);
-      } else if (action.filter === "UN_DONE") {
-        return state.filter((todo) => !todo.complete);
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      if (name.trim!== "") {
+        if (editIndex !== null) {
+            const updatedInputs = [...inputs]
+            updatedInputs[editIndex] = name
+            setInputs(updatedInputs)
+            setEditIndex(null)
+        }else{setInputs([...inputs,name])}
+        setName("")
       }
-      return state;
-    default:
-      return state;
-  }
-};
+    //   if (name.trim() !== "") {
+    //     if (editIndex !== null) {
+    //       const updatedInputs = [...inputs];
+    //       updatedInputs[editIndex] = name;
+    //       setInputs(updatedInputs);
+    //       setEditIndex(null);
+    //     } else {
+    //       setInputs([...inputs, name]);
+    //     }
+    //     setName("");
+    //   }
+    };
 
-export const Todos = () => {
-  const [todos, dispatch] = useReducer(reducer, initialTodos);
-  const titleInputRef = useRef();
-  const [todo, setTodo] = useState(null);
-  const [filter, setFilter] = useState("ALL");
+    const handleDelete = (index) => {
+      setInputs(inputs.filter((_, i) => i !== index));
+    };
 
-  const handleComplete = (id) => {
-    dispatch({ type: COMPLETE, id });
-  };
-
-  const handleAdd = (event) => {
-    event.preventDefault();
-    const { value } = titleInputRef.current;
-    if (value) {
-      const newTodo = { id: todos.length + 1, title: value, complete: false };
-      dispatch({ type: ADD, todo: newTodo });
-      titleInputRef.current.value = "";
-    } else {
-      alert("To add a todo please enter a title first!");
-    }
-  };
-
-  const handleDelete = (id) => {
-    const isAllowDelete = window.confirm(`Are you sure? You want to delete this todo with id (${id})`);
-    if (isAllowDelete) {
-      dispatch({ type: DELETE, id });
-    }
-  };
-
-  const handleEdit = (id) => {
-    const todoToEdit = todos.find((todo) => todo.id === id);
-    if (todoToEdit) {
-      const newTitle = prompt("Edit the todo title:", todoToEdit.title);
-      if (newTitle) {
-        dispatch({ type: EDIT, todo: { ...todoToEdit, title: newTitle } });
-      }
-    }
-  };
-
-  const handleDeleteAll = () => {
-    const isAllowDelete = window.confirm("Are you sure? You want to delete all todos?");
-    if (isAllowDelete) {
-      dispatch({ type: DELETE_ALL });
-    }
-  };
-
-  const handleDeleteDone = () => {
-    const isAllowDone = window.confirm("Are You Sure You want to delete done todos?")
-    if (isAllowDone) {
-    dispatch({ type: DELETE_DONE });
-      
-    }
-  };
-
-  const handleFilter = (selectedFilter) => {
-    setFilter(selectedFilter);
-  };
-
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === "ALL") return true;
-    if (filter === "DONE") return todo.complete;
-    if (filter === "UN_DONE") return !todo.complete;
-    return true;
-  });
-
-  return (
-    <div className="container">
-      <h1 style={{ textAlign: "center" }}>Todo Input</h1>
-      <form onSubmit={handleAdd}>
-        <div className="input">
-          <input type="text" placeholder="New Todo" ref={titleInputRef} />
-          <button type="submit">Add New Task</button>
-        </div>
-      </form>
-      <h1 style={{ textAlign: "center" }}>Todo List</h1>
-      <div className="buttons">
-        <button onClick={() => handleFilter("ALL")}>All</button>
-        <button onClick={() => handleFilter("DONE")}>Done</button>
-        <button onClick={() => handleFilter("UN_DONE")}>Undone</button>
-      </div>
-      {filteredTodos.length > 0 ? (
-        filteredTodos.map((todo, index) => (
-          <div>
-            <div key={todo.id} className="todo-label">
-              <label
-                style={{
-                  ...(todo.complete && {
-                    textDecoration: "line-through",
-                    color: "red",
-                  }),
-                }}
-              >
-                {index + 1} - {todo.title}
-              </label>
-              <div>
-                <input
-                  type="checkbox"
-                  checked={todo.complete}
-                  onChange={() => handleComplete(todo.id)}
-                />
-                <MdModeEdit
-                  size={25}
-                  color="orange"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleEdit(todo.id)}
-                />
-                <FaTrash
-                  size={25}
-                  color="red"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleDelete(todo.id)}
-                />
+    const handleEdit = (index) => {
+      setName(inputs[index]);
+      setEditIndex(index);
+    };
+  
+    return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">Todo List</h2>
+        <form onSubmit={handleSubmit} className="flex space-x-2 mb-4">
+          <input 
+            type="text" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter a task..."
+          />
+          <button 
+            type="submit" 
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all"
+          >
+            {editIndex !== null ? "Update" : "Add"}
+          </button>
+        </form>
+        <div className="space-y-2">
+          {inputs.map((item, index) => (
+            <div key={index} className="flex justify-between items-center bg-gray-200 p-2 rounded-md">
+              <span className="text-gray-700">{item}</span>
+              <div className="space-x-2">
+                <button 
+                  onClick={() => handleEdit(index)}
+                  className="px-3 py-1 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-all"
+                >
+                  Edit
+                </button>
+                <button 
+                  onClick={() => handleDelete(index)}
+                  className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all"
+                >
+                  Delete
+                </button>
               </div>
-
             </div>
-            
-          </div>
-        ))
-      ) : (
-        <h5 style={{ color: "gray" }}>There are no todos yet. Please add from the above.</h5>
-      )}
-<div className="delete-btn">
-              <button onClick={handleDeleteDone}>Delete Done Tasks</button>
-              <button onClick={handleDeleteAll}>Delete All Tasks</button>
-            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
-};
+}
+
+export default Input;
