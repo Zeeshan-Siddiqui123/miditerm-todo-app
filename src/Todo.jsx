@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const Input = () => {
     const [name, setName] = useState("");
     const [inputs, setInputs] = useState([]);
-    const [editIndex, setEditIndex] = useStat(null);
+    const [editIndex, setEditIndex] = useState(null);
 
     const handleSubmit = (event) => {
       event.preventDefault();
